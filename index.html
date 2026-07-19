@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About me</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0D1117;
+    --panel: #131920;
+    --panel-border: #232B36;
+    --text: #E6EDF3;
+    --muted: #8B949E;
+    --accent: #4FD1C5;     /* teal - màu "prompt" */
+    --ac: #3FB950;         /* xanh Accepted */
+    --wa: #F85149;         /* đỏ Wrong Answer (dùng làm điểm nhấn nhẹ) */
+    --purple: #A371F7;     /* tím rating */
+  }
+
+  *{ box-sizing: border-box; }
+
+  body{
+    margin:0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    line-height: 1.6;
+  }
+
+  .mono{ font-family:'JetBrains Mono', monospace; }
+
+  a{ color: var(--accent); text-decoration:none; }
+  a:hover{ text-decoration: underline; }
+
+  .wrap{
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 48px 20px 100px;
+  }
+
+  /* ---------- HERO: giả lập cửa sổ terminal ---------- */
+  .terminal{
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+  }
+  .terminal-bar{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding: 10px 14px;
+    background: #1A2129;
+    border-bottom: 1px solid var(--panel-border);
+  }
+  .dot{ width:11px; height:11px; border-radius:50%; }
+  .dot.red{ background:#FF5F56; }
+  .dot.yellow{ background:#FFBD2E; }
+  .dot.green{ background:#27C93F; }
+  .terminal-title{
+    margin-left: 8px;
+    color: var(--muted);
+    font-size: 12.5px;
+  }
+  .terminal-body{
+    padding: 28px 26px 32px;
+    font-size: 15px;
+  }
+  .prompt{ color: var(--accent); }
+  .path{ color: var(--purple); }
+  .cmd{ color: var(--text); }
+  .out-name{
+    font-size: 34px;
+    font-weight: 800;
+    margin: 14px 0 4px;
+    color: var(--text);
+  }
+  .out-role{
+    color: var(--muted);
+    font-size: 15.5px;
+    margin-bottom: 2px;
+  }
+  .cursor{
+    display:inline-block;
+    width: 9px; height: 18px;
+    background: var(--accent);
+    margin-left: 4px;
+    animation: blink 1s steps(1) infinite;
+    vertical-align: -3px;
+  }
+  @keyframes blink{ 50%{ opacity:0; } }
+
+  /* avatar giữ chỗ - thay bằng ảnh thật */
+  .avatar{
+    width: 74px; height: 74px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--accent), var(--purple));
+    display:flex; align-items:center; justify-content:center;
+    font-weight:800; font-size: 26px; color:#0D1117;
+    float:right;
+    margin-left: 16px;
+  }
+  .section{
+    margin-top: 34px;
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
+    border-radius: 10px;
+    padding: 24px 26px;
+  }
+  .section-tag{
+    font-size: 11.5px;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    font-weight: 700;
+  }
+  .section h2{
+    margin: 0 0 14px;
+    font-size: 20px;
+  }
+  .kv{
+    display:grid;
+    grid-template-columns: 110px 1fr;
+    gap: 6px 14px;
+    font-size: 14.5px;
+    margin-bottom: 4px;
+  }
+  .kv .k{ color: var(--muted); }
+
+  /* skills như mảng code */
+  .arr{
+    font-size: 14.5px;
+    line-height: 1.9;
+  }
+  .tag{
+    display:inline-block;
+    background: #1B222B;
+    border: 1px solid var(--panel-border);
+    color: var(--text);
+    padding: 3px 10px;
+    border-radius: 6px;
+    margin: 3px 4px 3px 0;
+    font-size: 13.5px;
+  }
+
+  /* bảng thành tích kiểu submissions */
+  table{
+    width:100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+  th, td{
+    text-align:left;
+    padding: 9px 8px;
+    border-bottom: 1px solid var(--panel-border);
+  }
+  th{
+    color: var(--muted);
+    font-weight: 600;
+    font-size: 12.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .verdict{
+    display:inline-block;
+    padding: 2px 9px;
+    border-radius: 5px;
+    font-size: 12.5px;
+    font-weight: 700;
+  }
+  .verdict.ac{ background: rgba(63,185,80,0.15); color: var(--ac); }
+  .verdict.pending{ background: rgba(163,113,247,0.15); color: var(--purple); }
+
+  /* contact như lời gọi hàm */
+  .contact-line{
+    font-size: 15px;
+    margin: 4px 0;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 6px;
+    transition: background 0.15s ease;
+    width: fit-content;
+}
+.contact-line:hover{ background: #1B222B; }
+.contact-line .fn{ color: var(--purple); }
+.contact-line .str{ color: var(--ac); }
+.contact-line .hint{
+    color: var(--muted);
+    font-size: 12px;
+    margin-left: 10px;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+}
+.contact-line:hover .hint{ opacity: 1; }
+.contact-line.copied .hint{
+    opacity: 1;
+    color: var(--ac);
+}
+
+  footer{
+    text-align:center;
+    color: var(--muted);
+    font-size: 12.5px;
+    margin-top: 44px;
+  }
+
+  @media (max-width: 600px){
+    .out-name{ font-size: 26px; }
+    .avatar{ float:none; margin: 0 0 14px 0; }
+    .kv{ grid-template-columns: 90px 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ============ HERO ============ -->
+  <div class="terminal">
+    <div class="terminal-bar">
+      <div class="dot red"></div>
+      <div class="dot yellow"></div>
+      <div class="dot green"></div>
+      <div class="terminal-title mono">NMK — ~/vungtau</div>
+    </div>
+    <div class="terminal-body mono">
+
+      <!-- THAY CHỮ CÁI TRONG AVATAR BẰNG CHỮ CÁI ĐẦU TÊN EM -->
+      <img src="avatar.jpg" class="avatar" style="object-fit:cover;">
+
+      <div><span class="prompt">guest@web</span>:<span class="path">~</span>$ <span class="cmd">whoami</span><span class="cursor"></span></div>
+
+      <!-- ĐỔI TÊN Ở ĐÂY -->
+      <div class="out-name">Nguyễn Minh Khôi</div>
+      <!-- ĐỔI MÔ TẢ NGẮN Ở ĐÂY -->
+      <div class="out-role">Học sinh chuyên Tin THPT Chuyên Lê Quý Đôn— Vũng Tàu</div>
+      <div class="out-role">Thuật toán,cấu trúc dữ liệu</div>
+    </div>
+  </div>
+
+  <!-- ============ ABOUT — style "đề bài" ============ -->
+  <div class="section">
+    <div class="section-tag">Problem A — Giới thiệu</div>
+    <h2>Về mình</h2>
+    <div class="kv">
+      <div class="k">Input:</div>
+      <div>Sự tò mò cùng một chiếc laptop cũ.</div>
+    </div>
+    <div class="kv">
+      <div class="k">Output:</div>
+      <div>Một cậu học sinh bình thường cùng ước mơ không ai nghĩ sẽ chạm tới.</div>
+    </div>
+    <div class="kv">
+      <div class="k">Constraint:</div>
+      <div>Vẫn đang học, vẫn đang cố gắng mỗi ngày một chút.</div>
+    </div>
+    <p style="margin-top:14px; font-size:14.5px; color: var(--muted);">
+      <!-- Viết 2-3 câu mô tả bản thân ở đây, kiểu như đoạn giới thiệu thật -->
+      Mình là học sinh lớp 10 chuyên Tin, đam mê lập trình thi đấu. Ngoài việc luyện thuật toán,
+      mình cũng là một VDV Bóng Bàn, một KOC làm tóc, một thằng nhóc doom scroll TikTok, và một người bạn luôn sẵn sàng giúp đỡ mọi người. Mình thích học hỏi những điều mới, đặc biệt là trong lĩnh vực lập trình và công nghệ
+    </p>
+  </div>
+
+  <!-- ============ SKILLS — style mảng code ============ -->
+  <div class="section">
+    <div class="section-tag">Problem B — Kỹ năng</div>
+    <h2>Kỹ năng &amp; công cụ</h2>
+    <div class="arr">
+      <span class="tag">C++</span>
+      <span class="tag">Thuật toán</span>
+      <span class="tag">Cấu trúc dữ liệu</span>
+      <span class="tag">Quy hoạch động</span>
+      <span class="tag">Binary Search</span>
+      <span class="tag">Backtracking</span>
+      <span class="tag">Hạng D VTau Bóng Bàn (cựu Top1 VTAU U14 2024)</span>
+      <!-- Thêm/xoá thẻ <span class="tag">...</span> tuỳ kỹ năng của em -->
+    </div>
+  </div>
+
+  <!-- ============ ACHIEVEMENTS — style bảng submissions ============ -->
+  <div class="section">
+    <div class="section-tag">Problem C — Thành tích</div>
+    <h2>Quá trình thi đấu</h2>
+    <table>
+      <thead>
+        <tr><th>Kỳ thi</th><th>Năm</th><th>Kết quả</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Đội tuyển Tin TPHCM</td>
+          <td>2026</td>
+          <td><span class="verdict pending">Đang chờ kết quả</span></td>
+        </tr>
+        <tr>
+          <td>Kì thi tuyển sinh 10 vô Chuyên</td>
+          <td>2025</td>
+          <td><span class="verdict ac">AC</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ============ CONTACT — style gọi hàm ============ -->
+  <div class="section">
+    <div class="section-tag">Problem D — Liên hệ</div>
+    <h2>Liên hệ với mình</h2>
+    <div class="mono">
+  <div class="contact-line" onclick="copyText(this, 'tenban@email.com')">
+    <span class="fn">email</span>(<span class="str">"nomokadzvcl@email.com"</span>)<span class="hint">nhấn để copy</span>
+  </div>
+  <div class="contact-line" onclick="copyText(this, '0908427574')">
+    <span class="fn">zalo</span>(<span class="str">"0908427574"</span>)<span class="hint">nhấn để copy</span>
+  </div>
+  <div class="contact-line" onclick="window.open('https://fb.com/NoMoKa11/', '_blank')">
+    <span class="fn">facebook</span>(<span class="str">"fb.com/NoMoKa11/"</span>)<span class="hint">nhấn để mở</span>
+  </div>
+</div>
+
+<script>
+function copyText(el, value){
+  navigator.clipboard.writeText(value).then(() => {
+    const hint = el.querySelector('.hint');
+    const oldText = hint.textContent;
+    el.classList.add('copied');
+    hint.textContent = 'Đã copy!';
+    setTimeout(() => {
+      el.classList.remove('copied');
+      hint.textContent = oldText;
+    }, 1200);
+  });
+}
+</script>
+  </div>
+
+  <footer>© 2026 — NMK</footer>
+
+</div>
+</body>
+</html>
