@@ -13,14 +13,12 @@
     --panel-border: #232B36;
     --text: #E6EDF3;
     --muted: #8B949E;
-    --accent: #4FD1C5;     /* teal - màu "prompt" */
-    --ac: #3FB950;         /* xanh Accepted */
-    --wa: #F85149;         /* đỏ Wrong Answer (dùng làm điểm nhấn nhẹ) */
-    --purple: #A371F7;     /* tím rating */
+    --accent: #4FD1C5;
+    --ac: #3FB950;
+    --wa: #F85149;
+    --purple: #A371F7;
   }
-
   *{ box-sizing: border-box; }
-
   body{
     margin:0;
     background: var(--bg);
@@ -28,9 +26,7 @@
     font-family: 'Inter', sans-serif;
     line-height: 1.6;
   }
-
   .mono{ font-family:'JetBrains Mono', monospace; }
-
   a{ color: var(--accent); text-decoration:none; }
   a:hover{ text-decoration: underline; }
 
@@ -40,7 +36,43 @@
     padding: 48px 20px 100px;
   }
 
-  /* ---------- HERO: giả lập cửa sổ terminal ---------- */
+  /* Nav */
+  .nav{
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 20px 20px 0;
+    display:flex;
+    gap: 22px;
+    font-size: 14px;
+  }
+  .nav a{
+    color: var(--muted);
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .nav a::before{ content: "cd ~/"; color: var(--panel-border); }
+  .nav a.active{ color: var(--accent); }
+  .nav a:hover{ color: var(--accent); text-decoration:none; }
+
+  /* Nút đến Shop */
+  .shop-link-btn {
+    display: block;
+    margin: 40px auto 30px;
+    max-width: 320px;
+    text-align: center;
+    background: var(--purple);
+    color: white;
+    font-weight: 700;
+    font-size: 15px;
+    padding: 14px 24px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+  }
+  .shop-link-btn:hover {
+    background: #b58fff;
+    transform: translateY(-2px);
+  }
+
+  /* === Giữ nguyên toàn bộ CSS cũ từ đây trở xuống === */
   .terminal{
     background: var(--panel);
     border: 1px solid var(--panel-border);
@@ -92,8 +124,6 @@
     vertical-align: -3px;
   }
   @keyframes blink{ 50%{ opacity:0; } }
-
-  /* avatar giữ chỗ - thay bằng ảnh thật */
   .avatar{
     width: 74px; height: 74px;
     border-radius: 10px;
@@ -130,8 +160,6 @@
     margin-bottom: 4px;
   }
   .kv .k{ color: var(--muted); }
-
-  /* skills như mảng code */
   .arr{
     font-size: 14.5px;
     line-height: 1.9;
@@ -146,8 +174,6 @@
     margin: 3px 4px 3px 0;
     font-size: 13.5px;
   }
-
-  /* bảng thành tích kiểu submissions */
   table{
     width:100%;
     border-collapse: collapse;
@@ -174,8 +200,6 @@
   }
   .verdict.ac{ background: rgba(63,185,80,0.15); color: var(--ac); }
   .verdict.pending{ background: rgba(163,113,247,0.15); color: var(--purple); }
-
-  /* contact như lời gọi hàm */
   .contact-line{
     font-size: 15px;
     margin: 4px 0;
@@ -184,30 +208,28 @@
     border-radius: 6px;
     transition: background 0.15s ease;
     width: fit-content;
-}
-.contact-line:hover{ background: #1B222B; }
-.contact-line .fn{ color: var(--purple); }
-.contact-line .str{ color: var(--ac); }
-.contact-line .hint{
+  }
+  .contact-line:hover{ background: #1B222B; }
+  .contact-line .fn{ color: var(--purple); }
+  .contact-line .str{ color: var(--ac); }
+  .contact-line .hint{
     color: var(--muted);
     font-size: 12px;
     margin-left: 10px;
     opacity: 0;
     transition: opacity 0.15s ease;
-}
-.contact-line:hover .hint{ opacity: 1; }
-.contact-line.copied .hint{
+  }
+  .contact-line:hover .hint{ opacity: 1; }
+  .contact-line.copied .hint{
     opacity: 1;
     color: var(--ac);
-}
-
+  }
   footer{
     text-align:center;
     color: var(--muted);
     font-size: 12.5px;
     margin-top: 44px;
   }
-
   @media (max-width: 600px){
     .out-name{ font-size: 26px; }
     .avatar{ float:none; margin: 0 0 14px 0; }
@@ -216,9 +238,14 @@
 </style>
 </head>
 <body>
-<div class="wrap">
 
-  <!-- ============ HERO ============ -->
+<div class="nav">
+  <a href="index.html" class="active">about</a>
+  <a href="shop.html">shop</a>
+</div>
+
+<div class="wrap">
+  <!-- Nội dung trang giới thiệu giữ nguyên -->
   <div class="terminal">
     <div class="terminal-bar">
       <div class="dot red"></div>
@@ -227,21 +254,14 @@
       <div class="terminal-title mono">NMK — ~/vungtau</div>
     </div>
     <div class="terminal-body mono">
-
-      <!-- THAY CHỮ CÁI TRONG AVATAR BẰNG CHỮ CÁI ĐẦU TÊN EM -->
       <img src="avatar.jpg" class="avatar" style="object-fit:cover;">
-
       <div><span class="prompt">guest@web</span>:<span class="path">~</span>$ <span class="cmd">whoami</span><span class="cursor"></span></div>
-
-      <!-- ĐỔI TÊN Ở ĐÂY -->
       <div class="out-name">Nguyễn Minh Khôi</div>
-      <!-- ĐỔI MÔ TẢ NGẮN Ở ĐÂY -->
       <div class="out-role">Học sinh chuyên Tin THPT Chuyên Lê Quý Đôn— Vũng Tàu</div>
       <div class="out-role">Thuật toán,cấu trúc dữ liệu</div>
     </div>
   </div>
 
-  <!-- ============ ABOUT — style "đề bài" ============ -->
   <div class="section">
     <div class="section-tag">Problem A — Giới thiệu</div>
     <h2>Về mình</h2>
@@ -258,13 +278,11 @@
       <div>Vẫn đang học, vẫn đang cố gắng mỗi ngày một chút.</div>
     </div>
     <p style="margin-top:14px; font-size:14.5px; color: var(--muted);">
-      <!-- Viết 2-3 câu mô tả bản thân ở đây, kiểu như đoạn giới thiệu thật -->
       Mình là học sinh lớp 10 chuyên Tin, đam mê lập trình thi đấu. Ngoài việc luyện thuật toán,
       mình cũng là một VDV Bóng Bàn, một KOC làm tóc, một thằng nhóc doom scroll TikTok, và một người bạn luôn sẵn sàng giúp đỡ mọi người. Mình thích học hỏi những điều mới, đặc biệt là trong lĩnh vực lập trình và công nghệ
     </p>
   </div>
 
-  <!-- ============ SKILLS — style mảng code ============ -->
   <div class="section">
     <div class="section-tag">Problem B — Kỹ năng</div>
     <h2>Kỹ năng &amp; công cụ</h2>
@@ -276,11 +294,9 @@
       <span class="tag">Binary Search</span>
       <span class="tag">Backtracking</span>
       <span class="tag">Hạng D VTau Bóng Bàn (cựu Top1 VTAU U14 2024)</span>
-      <!-- Thêm/xoá thẻ <span class="tag">...</span> tuỳ kỹ năng của em -->
     </div>
   </div>
 
-  <!-- ============ ACHIEVEMENTS — style bảng submissions ============ -->
   <div class="section">
     <div class="section-tag">Problem C — Thành tích</div>
     <h2>Quá trình thi đấu</h2>
@@ -303,20 +319,28 @@
     </table>
   </div>
 
-  <!-- ============ CONTACT — style gọi hàm ============ -->
   <div class="section">
     <div class="section-tag">Problem D — Liên hệ</div>
     <h2>Liên hệ với mình</h2>
     <div class="mono">
-  <div class="contact-line" onclick="copyText(this, 'tenban@email.com')">
-    <span class="fn">email</span>(<span class="str">"nomokadzvcl@email.com"</span>)<span class="hint">nhấn để copy</span>
+      <div class="contact-line" onclick="copyText(this, 'nomokadzvcl@email.com')">
+        <span class="fn">email</span>(<span class="str">"nomokadzvcl@email.com"</span>)<span class="hint">nhấn để copy</span>
+      </div>
+      <div class="contact-line" onclick="copyText(this, '0908427574')">
+        <span class="fn">zalo</span>(<span class="str">"0908427574"</span>)<span class="hint">nhấn để copy</span>
+      </div>
+      <div class="contact-line" onclick="window.open('https://fb.com/NoMoKa11/', '_blank')">
+        <span class="fn">facebook</span>(<span class="str">"fb.com/NoMoKa11/"</span>)<span class="hint">nhấn để mở</span>
+      </div>
+    </div>
   </div>
-  <div class="contact-line" onclick="copyText(this, '0908427574')">
-    <span class="fn">zalo</span>(<span class="str">"0908427574"</span>)<span class="hint">nhấn để copy</span>
-  </div>
-  <div class="contact-line" onclick="window.open('https://fb.com/NoMoKa11/', '_blank')">
-    <span class="fn">facebook</span>(<span class="str">"fb.com/NoMoKa11/"</span>)<span class="hint">nhấn để mở</span>
-  </div>
+
+  <!-- Nút đến Shop -->
+  <a href="shop.html" class="shop-link-btn">
+    → Xem toàn bộ Shop
+  </a>
+
+  <footer>© 2026 — NMK</footer>
 </div>
 
 <script>
@@ -333,10 +357,5 @@ function copyText(el, value){
   });
 }
 </script>
-  </div>
-
-  <footer>© 2026 — NMK</footer>
-
-</div>
 </body>
 </html>
