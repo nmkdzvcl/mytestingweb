@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cửa hàng</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0D1117;
+    --panel: #131920;
+    --panel-border: #232B36;
+    --text: #E6EDF3;
+    --muted: #8B949E;
+    --accent: #4FD1C5;
+    --ac: #3FB950;
+    --wa: #F85149;
+    --purple: #A371F7;
+  }
+  *{ box-sizing: border-box; }
+  body{
+    margin:0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    line-height: 1.6;
+  }
+  .mono{ font-family:'JetBrains Mono', monospace; }
+  a{ color: var(--accent); text-decoration:none; }
+  a:hover{ text-decoration: underline; }
+
+  .wrap{
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px 20px 100px;
+  }
+
+  .nav{
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px 20px 0;
+    display:flex;
+    gap: 22px;
+    font-size: 14px;
+  }
+  .nav a{
+    color: var(--muted);
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .nav a::before{ content: "cd ~/"; color: var(--panel-border); }
+  .nav a.active{ color: var(--accent); }
+  .nav a:hover{ color: var(--accent); text-decoration:none; }
+
+  .page-title{
+    margin: 26px 0 4px;
+    font-size: 26px;
+    font-weight: 800;
+  }
+  .page-sub{
+    color: var(--muted);
+    font-size: 14.5px;
+    margin-bottom: 28px;
+  }
+
+  .grid{
+    display:grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 18px;
+  }
+
+  .card{
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
+    border-radius: 10px;
+    overflow: hidden;
+    display:flex;
+    flex-direction: column;
+    transition: transform 0.15s ease, border-color 0.15s ease;
+  }
+  .card:hover{
+    transform: translateY(-3px);
+    border-color: var(--accent);
+  }
+
+  .card-img{
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background: #1A2129;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color: var(--muted);
+    font-size: 13px;
+    overflow: hidden;
+  }
+  .card-img img{
+    width:100%; height:100%; object-fit: cover;
+  }
+
+  .gallery{
+    position: relative;
+    cursor: pointer;
+  }
+  .gallery img{
+    position: absolute;
+    inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+  }
+  .gallery img.active{ opacity: 1; }
+  .gallery .dots{
+    position: absolute;
+    bottom: 8px;
+    left: 0; right: 0;
+    display:flex;
+    justify-content:center;
+    gap: 5px;
+    z-index: 2;
+  }
+  .gallery .dot{
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.35);
+    cursor: pointer;
+    transition: background 0.15s ease, transform 0.15s ease;
+  }
+  .gallery .dot.active{
+    background: var(--accent);
+    transform: scale(1.3);
+  }
+  .gallery .count{
+    position: absolute;
+    top: 8px; right: 8px;
+    background: rgba(0,0,0,0.55);
+    color: var(--text);
+    font-size: 10.5px;
+    font-family: 'JetBrains Mono', monospace;
+    padding: 2px 6px;
+    border-radius: 5px;
+    z-index: 2;
+  }
+
+  .card-body{
+    padding: 14px 16px 16px;
+    flex: 1;
+    display:flex;
+    flex-direction: column;
+  }
+
+  .card-tag{
+    font-size: 11px;
+    color: var(--muted);
+    font-family: 'JetBrains Mono', monospace;
+    margin-bottom: 6px;
+  }
+
+  .card-name{
+    font-weight: 700;
+    font-size: 15.5px;
+    margin-bottom: 6px;
+  }
+
+  .card-price{
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 15px;
+    margin-bottom: 10px;
+  }
+
+  .verdict{
+    display:inline-block;
+    padding: 2px 9px;
+    border-radius: 5px;
+    font-size: 11.5px;
+    font-weight: 700;
+    font-family: 'JetBrains Mono', monospace;
+    width: fit-content;
+    margin-bottom: 12px;
+  }
+  .verdict.ac{ background: rgba(63,185,80,0.15); color: var(--ac); }
+  .verdict.wa{ background: rgba(248,81,73,0.15); color: var(--wa); }
+
+  .buy-btn{
+    margin-top: auto;
+    display:block;
+    text-align:center;
+    background: var(--accent);
+    color: #0D1117;
+    font-weight: 700;
+    font-size: 13.5px;
+    padding: 8px 0;
+    border-radius: 7px;
+    transition: opacity 0.15s ease;
+  }
+  .buy-btn:hover{ opacity: 0.85; text-decoration:none; }
+  .buy-btn.disabled{
+    background: #232B36;
+    color: var(--muted);
+    pointer-events: none;
+  }
+
+  footer{
+    text-align:center;
+    color: var(--muted);
+    font-size: 12.5px;
+    margin-top: 44px;
+  }
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <a href="index.html">about</a>
+  <a href="shop.html" class="active">shop</a>
+</div>
+
+<div class="wrap">
+
+  <div class="page-title mono">$ On sale</div>
+  <div class="page-sub">Danh sách đồ đang bán — liên hệ mình nếu quan tâm món nào nhé</div>
+
+  <div class="grid">
+
+    <!-- ============ SẢN PHẨM 1 ============ -->
+    <div class="card">
+      <div class="card-img">
+        <img src="bud5pro.jpg">
+      </div>
+      <div class="card-body">
+        <div class="card-tag">#001</div>
+        <div class="card-name">Tai nghe Bluetooth Buds5 Pro(no box)</div>
+        <div class="card-price">120.000đ (CÓ FIX)</div>
+        <div class="verdict ac">Còn hàng</div>
+        <a href="https://zalo.me/0908427574" class="buy-btn">Check tận nơi - Liên hệ mua</a>
+      </div>
+    </div>
+
+    <!-- ============ SẢN PHẨM 2 (nhiều ảnh) ============ -->
+    <div class="card">
+      <div class="card-img gallery" onclick="nextImg(this)">
+        <img src="volcanic1.jpg" class="active">
+        <img src="volcanic2.jpg">
+        <div class="count">1/2</div>
+        <div class="dots">
+          <span class="dot active" onclick="event.stopPropagation(); setImg(this, 0)"></span>
+          <span class="dot" onclick="event.stopPropagation(); setImg(this, 1)"></span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-tag">#002</div>
+        <div class="card-name">Sáp vuốt tóc Volcanic chính hãng (98%)</div>
+        <div class="card-price">230.000đ (CÓ FIX)</div>
+        <div class="verdict ac">Còn hàng</div>
+        <a href="https://zalo.me/0908427574" class="buy-btn">Check tận nơi - Liên hệ mua</a>
+      </div>
+    </div>
+
+    <!-- ============ SẢN PHẨM 3 ============ -->
+    <div class="card">
+      <div class="card-img">
+        <img src="oceandream.jpg">
+      </div>
+      <div class="card-body">
+        <div class="card-tag">#003</div>
+        <div class="card-name">Sáp vuốt tóc Ocean Dream chính hãng 80% (no box)</div>
+        <div class="card-price">220.000đ (CÓ FIX)</div>
+        <div class="verdict ac">Còn hàng</div>
+        <a href="https://zalo.me/0908427574" class="buy-btn">Check tận nơi - Liên hệ mua</a>
+      </div>
+    </div>
+
+    <!-- ============ SẢN PHẨM 4 ============ -->
+    <div class="card">
+      <div class="card-img">
+        <img src="flashbold.jpg">
+      </div>
+      <div class="card-body">
+        <div class="card-tag">#004</div>
+        <div class="card-name">Xịt tạo phồng Flash Bold chính hãng (95%)</div>
+        <div class="card-price">90.000đ (CÓ FIX)</div>
+        <div class="verdict ac">Còn hàng</div>
+        <a href="https://zalo.me/0908427574" class="buy-btn">Check tận nơi - Liên hệ mua</a>
+      </div>
+    </div>
+
+    <!-- ============ SẢN PHẨM 5 ============ -->
+    <div class="card">
+      <div class="card-img">
+        <img src="lagoon.jpg">
+      </div>
+      <div class="card-body">
+        <div class="card-tag">#005</div>
+        <div class="card-name">Xịt tạo phồng Lagoon chính hãng (99%)</div>
+        <div class="card-price">150.000đ (CÓ FIX)</div>
+        <div class="verdict ac">Còn hàng</div>
+        <a href="https://zalo.me/0908427574" class="buy-btn">Check tận nơi - Liên hệ mua</a>
+      </div>
+    </div>
+
+    <!-- ============ SẢN PHẨM 6 (nhiều ảnh) ============ -->
+    <div class="card">
+      <div class="card-img gallery" onclick="nextImg(this)">
+        <img src="maysayroug.jpg" class="active">
+        <img src="maysayroug1.jpg">
+        <div class="count">1/2</div>
+        <div class="dots">
+          <span class="dot active" onclick="event.stopPropagation(); setImg(this, 0)"></span>
+          <span class="dot" onclick="event.stopPropagation(); setImg(this, 1)"></span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-tag">#006</div>
+        <div class="card-name">Máy sấy tóc Rough chính hãng (used 1y)</div>
+        <div class="card-price">100.000đ (CÓ FIX)</div>
+        <div class="verdict ac">Còn hàng</div>
+        <a href="https://zalo.me/0908427574" class="buy-btn">Check tận nơi - Liên hệ mua</a>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>© 2026 — CHỈ NHẬN SHIP VTAU</footer>
+</div>
+
+<script>
+  function setImg(dotEl, idx){
+    const g = dotEl.closest('.gallery');
+    const imgs = [...g.querySelectorAll('img')];
+    const dots = [...g.querySelectorAll('.dot')];
+    imgs.forEach((img, i) => img.classList.toggle('active', i === idx));
+    dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+    const count = g.querySelector('.count');
+    if(count) count.textContent = (idx + 1) + '/' + imgs.length;
+  }
+
+  function nextImg(g){
+    const imgs = [...g.querySelectorAll('img')];
+    const cur = imgs.findIndex(img => img.classList.contains('active'));
+    const next = (cur + 1) % imgs.length;
+    setImg(g.querySelector('.dot'), next);
+  }
+</script>
+</body>
+</html>
