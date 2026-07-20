@@ -234,6 +234,33 @@
     50%{ transform:scale(1.4); opacity:0.7; }
   }
 
+  /* Shop link in terminal */
+  .terminal-shop-link{
+    margin-top:18px; padding-top:16px;
+    border-top:1px solid var(--panel-border);
+    text-align:right;
+  }
+  .terminal-shop-link a{
+    display:inline-flex; align-items:center; gap:8px;
+    color:var(--accent);
+    font-family:'JetBrains Mono',monospace;
+    font-size:13.5px; font-weight:600;
+    transition:all 0.2s ease;
+    padding:6px 14px; border-radius:7px;
+    border:1px solid rgba(79,209,197,0.25);
+  }
+  .terminal-shop-link a:hover{
+    background:rgba(79,209,197,0.08);
+    text-decoration:none;
+  }
+  .terminal-shop-link a span.arrow{
+    font-size:16px;
+    transition:transform 0.2s;
+  }
+  .terminal-shop-link a:hover span.arrow{
+    transform:translateX(3px);
+  }
+
   .section{
     margin-top:28px;
     background:rgba(19,25,32,0.7);
@@ -308,6 +335,20 @@
     box-shadow:0 0 8px rgba(79,209,197,0.4);
   }
   .tl-dot.purple{ border-color:var(--purple); box-shadow:0 0 8px rgba(163,113,247,0.4); }
+  .tl-year{
+    font-family:'JetBrains Mono',monospace;
+    font-size:13px; color:var(--accent);
+    font-weight:700; margin-bottom:4px;
+  }
+  .tl-title{ font-weight:600; font-size:15px; margin-bottom:2px; }
+  .tl-sub{ color:var(--muted); font-size:13.5px; }
+
+  .verdict{
+    display:inline-block; padding:2px 9px; border-radius:5px;
+    font-size:11.5px; font-weight:700; font-family:'JetBrains Mono',monospace;
+  }
+  .verdict.ac{ background:rgba(63,185,80,0.15); color:var(--ac); }
+  .verdict.pending{ background:rgba(163,113,247,0.15); color:var(--purple); }
 
   .contact-line{
     font-size:15px; margin:4px 0; cursor:pointer;
@@ -327,6 +368,34 @@
     opacity:0; transition:opacity 0.15s;
   }
   .contact-line:hover .hint{ opacity:1; }
+  .contact-line.copied .hint{ opacity:1; color:var(--ac); }
+
+  /* Section shop link */
+  .section-shop-link{
+    margin-top:20px; padding-top:16px;
+    border-top:1px solid var(--panel-border);
+  }
+  .section-shop-link a{
+    display:inline-flex; align-items:center; gap:8px;
+    color:var(--accent);
+    font-family:'JetBrains Mono',monospace;
+    font-size:13.5px; font-weight:600;
+    transition:all 0.2s ease;
+    padding:8px 16px; border-radius:8px;
+    border:1px solid rgba(79,209,197,0.2);
+    background:rgba(79,209,197,0.04);
+  }
+  .section-shop-link a:hover{
+    background:rgba(79,209,197,0.1);
+    text-decoration:none;
+    transform:translateX(2px);
+  }
+  .section-shop-link a span.arrow{
+    transition:transform 0.2s;
+  }
+  .section-shop-link a:hover span.arrow{
+    transform:translateX(3px);
+  }
 
   .shop-cta{
     display:block; margin:36px auto 0; max-width:320px; text-align:center;
@@ -334,8 +403,9 @@
     color:#fff; font-weight:700; font-size:15px;
     padding:14px 24px; border-radius:10px;
     transition:all 0.25s ease;
+    text-decoration:none;
   }
-  .shop-cta:hover{ transform:translateY(-3px); box-shadow:0 8px 30px rgba(163,113,247,0.4); }
+  .shop-cta:hover{ transform:translateY(-3px); box-shadow:0 8px 30px rgba(163,113,247,0.4); text-decoration:none; }
 
   footer{
     text-align:center; color:var(--muted);
@@ -364,6 +434,7 @@
     background: rgba(79,209,197,0.08);
     transform: translateY(-2px);
     color: var(--accent);
+    text-decoration:none;
   }
 
   @media(max-width:600px){
@@ -415,10 +486,18 @@
         <div class="cur-item"><span class="cur-icon">🏓</span><div><div class="cur-label">đang tập</div><div class="cur-value">Bóng Bàn</div></div></div>
         <div class="cur-item" id="currentlyMusic"><span class="cur-icon">🎵</span><div><div class="cur-label">đang nghe</div><div class="cur-value" id="musicVal">...</div></div></div>
       </div>
+
+      <!-- ★ Shop link trong terminal ★ -->
+      <div class="terminal-shop-link">
+        <a href="shop.html">
+          📦 Xem shop
+          <span class="arrow">→</span>
+        </a>
+      </div>
     </div>
   </div>
 
-  <!-- Các section cũ giữ nguyên -->
+  <!-- Problem A — Giới thiệu -->
   <div class="section">
     <div class="section-tag">Problem A — Giới thiệu</div>
     <h2>Về mình</h2>
@@ -430,34 +509,74 @@
       mình cũng là một VĐV Bóng Bàn, một KOC làm tóc, một thằng nhóc doom scroll TikTok,
       và một người bạn luôn sẵn sàng giúp đỡ mọi người.
     </p>
+    <!-- ★ Shop link cuối Problem A ★ -->
+    <div class="section-shop-link">
+      <a href="shop.html">
+        📦 Ghé shop xem đồ secondhand
+        <span class="arrow">→</span>
+      </a>
+    </div>
   </div>
 
+  <!-- Problem B — Kỹ năng -->
   <div class="section">
     <div class="section-tag">Problem B — Kỹ năng</div>
     <h2>Kỹ năng &amp; công cụ</h2>
     <div class="tags">
-      <span class="tag"><span class="tag-icon">⚙️</span>C++</span>
-      <span class="tag"><span class="tag-icon">🧠</span>Thuật toán</span>
-      <span class="tag"><span class="tag-icon">🌲</span>Cấu trúc dữ liệu</span>
-      <span class="tag"><span class="tag-icon">📐</span>Quy hoạch động</span>
-      <span class="tag"><span class="tag-icon">🔍</span>Binary Search</span>
-      <span class="tag"><span class="tag-icon">↩️</span>Backtracking</span>
-      <span class="tag"><span class="tag-icon">🏓</span>Hạng D VTau Bóng Bàn</span>
-      <span class="tag"><span class="tag-icon">🏆</span>Top 1 VTAU U14 2024</span>
+      <span class="tag">⚙️ C++</span>
+      <span class="tag">🧠 Thuật toán</span>
+      <span class="tag">🌲 Cấu trúc dữ liệu</span>
+      <span class="tag">📐 Quy hoạch động</span>
+      <span class="tag">🔍 Binary Search</span>
+      <span class="tag">↩️ Backtracking</span>
+      <span class="tag">🏓 Hạng D VTau Bóng Bàn</span>
+      <span class="tag">🏆 Top 1 VTAU U14 2024</span>
+    </div>
+    <!-- ★ Shop link cuối Problem B ★ -->
+    <div class="section-shop-link">
+      <a href="shop.html">
+        📦 Ghé shop xem đồ secondhand
+        <span class="arrow">→</span>
+      </a>
     </div>
   </div>
 
+  <!-- Problem C — Thành tích -->
   <div class="section">
     <div class="section-tag">Problem C — Thành tích</div>
     <h2>Quá trình thi đấu</h2>
     <div class="timeline">
-      <div class="tl-item"><div class="tl-dot purple"></div><div class="tl-year">2026</div><div class="tl-title">Đội tuyển Tin TPHCM</div><div class="tl-sub"><span class="verdict pending">⏳ Đang chờ kết quả</span></div></div>
-      <div class="tl-item"><div class="tl-dot"></div><div class="tl-year">2025</div><div class="tl-title">Kì thi tuyển sinh vào lớp 10 Chuyên</div><div class="tl-sub">THPT Chuyên Lê Quý Đôn — Vũng Tàu</div><div style="margin-top:6px"><span class="verdict ac">✓ AC</span></div></div>
-      <div class="tl-item"><div class="tl-dot"></div><div class="tl-year">2024</div><div class="tl-title">Top 1 Bóng Bàn VTAU U14</div><div class="tl-sub">Hạng mục U14 — Giải Bóng Bàn Vũng Tàu</div><div style="margin-top:6px"><span class="verdict ac">✓ AC</span></div></div>
+      <div class="tl-item">
+        <div class="tl-dot purple"></div>
+        <div class="tl-year">2026</div>
+        <div class="tl-title">Đội tuyển Tin TPHCM</div>
+        <div class="tl-sub"><span class="verdict pending">⏳ Đang chờ kết quả</span></div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-year">2025</div>
+        <div class="tl-title">Kì thi tuyển sinh vào lớp 10 Chuyên</div>
+        <div class="tl-sub">THPT Chuyên Lê Quý Đôn — Vũng Tàu</div>
+        <div style="margin-top:6px"><span class="verdict ac">✓ AC</span></div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-year">2024</div>
+        <div class="tl-title">Top 1 Bóng Bàn VTAU U14</div>
+        <div class="tl-sub">Hạng mục U14 — Giải Bóng Bàn Vũng Tàu</div>
+        <div style="margin-top:6px"><span class="verdict ac">✓ AC</span></div>
+      </div>
+    </div>
+    <!-- ★ Shop link cuối Problem C ★ -->
+    <div class="section-shop-link">
+      <a href="shop.html">
+        📦 Ghé shop xem đồ secondhand
+        <span class="arrow">→</span>
+      </a>
     </div>
   </div>
 
-  <!-- Problem D với Social -->
+  <!-- Problem D — Liên hệ -->
   <div class="section">
     <div class="section-tag">Problem D — Liên hệ</div>
     <h2>Liên hệ với mình</h2>
@@ -471,6 +590,14 @@
       <div class="contact-line" onclick="window.open('https://fb.com/NoMoKa11/','_blank')">
         <span class="fn">facebook</span>(<span class="str">"fb.com/NoMoKa11/"</span>)<span class="hint">nhấn để mở</span>
       </div>
+    </div>
+
+    <!-- ★ Shop link cuối Problem D (trước SOCIALS) ★ -->
+    <div class="section-shop-link">
+      <a href="shop.html">
+        📦 Ghé shop xem đồ secondhand
+        <span class="arrow">→</span>
+      </a>
     </div>
 
     <div style="margin-top:28px;">
@@ -491,7 +618,7 @@
 </div>
 
 <script>
-// Typing animation (giữ nguyên)
+// Typing animation
 const NAME = 'Nguyễn Minh Khôi';
 const ROLE1 = 'Học sinh chuyên Tin — THPT Chuyên Lê Quý Đôn, Vũng Tàu';
 const ROLE2 = 'Thuật toán · Cấu trúc dữ liệu · Lập trình thi đấu';
