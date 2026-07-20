@@ -3,9 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>About me</title>
+<title>NMK — Nguyễn Minh Khôi</title>
+<meta name="description" content="Học sinh chuyên Tin THPT Chuyên Lê Quý Đôn Vũng Tàu. Thuật toán, cấu trúc dữ liệu, lập trình thi đấu.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg: #0D1117;
@@ -17,342 +18,536 @@
     --ac: #3FB950;
     --wa: #F85149;
     --purple: #A371F7;
+    --glow-accent: rgba(79,209,197,0.18);
+    --glow-purple: rgba(163,113,247,0.18);
   }
-  *{ box-sizing: border-box; }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html{ scroll-behavior: smooth; }
+
+  /* ─── Scrollbar ─────────────────────────────── */
+  ::-webkit-scrollbar{ width:6px; }
+  ::-webkit-scrollbar-track{ background:var(--bg); }
+  ::-webkit-scrollbar-thumb{ background:var(--panel-border); border-radius:3px; }
+  ::-webkit-scrollbar-thumb:hover{ background:var(--muted); }
+
   body{
-    margin:0;
     background: var(--bg);
     color: var(--text);
     font-family: 'Inter', sans-serif;
     line-height: 1.6;
+    overflow-x: hidden;
   }
-  .mono{ font-family:'JetBrains Mono', monospace; }
-  a{ color: var(--accent); text-decoration:none; }
-  a:hover{ text-decoration: underline; }
+  .mono{ font-family:'JetBrains Mono',monospace; }
+  a{ color:var(--accent); text-decoration:none; }
+  a:hover{ text-decoration:underline; }
 
-  .wrap{
-    max-width: 780px;
-    margin: 0 auto;
-    padding: 48px 20px 100px;
+  /* ─── Grid Background ───────────────────────── */
+  body::before{
+    content:'';
+    position:fixed; inset:0; z-index:0;
+    background-image:
+      linear-gradient(rgba(79,209,197,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(79,209,197,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events:none;
+  }
+  body::after{
+    content:'';
+    position:fixed; inset:0; z-index:0;
+    background: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(79,209,197,0.07) 0%, transparent 60%),
+                radial-gradient(ellipse 50% 50% at 90% 90%, rgba(163,113,247,0.05) 0%, transparent 50%);
+    pointer-events:none;
   }
 
-  /* Nav */
+  /* ─── Nav ───────────────────────────────────── */
   .nav{
-    max-width: 780px;
-    margin: 0 auto;
-    padding: 20px 20px 0;
-    display:flex;
-    gap: 22px;
-    font-size: 14px;
+    position:sticky; top:0; z-index:100;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    background: rgba(13,17,23,0.75);
+    border-bottom: 1px solid rgba(35,43,54,0.6);
+    padding: 14px 20px;
   }
-  .nav a{
-    color: var(--muted);
-    font-family: 'JetBrains Mono', monospace;
+  .nav-inner{
+    max-width:780px; margin:0 auto;
+    display:flex; align-items:center; justify-content:space-between;
   }
-  .nav a::before{ content: "cd ~/"; color: var(--panel-border); }
-  .nav a.active{ color: var(--accent); }
-  .nav a:hover{ color: var(--accent); text-decoration:none; }
+  .nav-logo{
+    font-family:'JetBrains Mono',monospace;
+    font-size:13px; font-weight:700;
+    color:var(--accent);
+    letter-spacing:0.04em;
+  }
+  .nav-links{ display:flex; gap:22px; font-size:13.5px; }
+  .nav-links a{
+    color:var(--muted);
+    font-family:'JetBrains Mono',monospace;
+    transition: color 0.15s;
+    position:relative;
+  }
+  .nav-links a::before{ content:"cd ~/"; color:var(--panel-border); transition:color 0.15s; }
+  .nav-links a.active{ color:var(--accent); }
+  .nav-links a.active::before{ color:rgba(79,209,197,0.4); }
+  .nav-links a:hover{ color:var(--accent); text-decoration:none; }
 
-  /* Nút đến Shop */
-  .shop-link-btn {
-    display: block;
-    margin: 40px auto 30px;
-    max-width: 320px;
-    text-align: center;
-    background: var(--purple);
-    color: white;
-    font-weight: 700;
-    font-size: 15px;
-    padding: 14px 24px;
-    border-radius: 8px;
-    transition: all 0.2s ease;
-  }
-  .shop-link-btn:hover {
-    background: #b58fff;
-    transform: translateY(-2px);
+  /* ─── Wrap ──────────────────────────────────── */
+  .wrap{
+    position:relative; z-index:1;
+    max-width:780px; margin:0 auto;
+    padding:48px 20px 120px;
   }
 
-  /* === Giữ nguyên toàn bộ CSS cũ từ đây trở xuống === */
+  /* ─── Hero Terminal ─────────────────────────── */
   .terminal{
-    background: var(--panel);
-    border: 1px solid var(--panel-border);
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+    position:relative;
+    background: rgba(19,25,32,0.8);
+    border:1px solid var(--panel-border);
+    border-radius:12px;
+    overflow:hidden;
+    box-shadow:
+      0 0 0 1px rgba(79,209,197,0.06),
+      0 20px 60px rgba(0,0,0,0.5),
+      0 0 80px rgba(79,209,197,0.04);
+    backdrop-filter:blur(8px);
   }
   .terminal-bar{
-    display:flex;
-    align-items:center;
-    gap:8px;
-    padding: 10px 14px;
-    background: #1A2129;
-    border-bottom: 1px solid var(--panel-border);
+    display:flex; align-items:center; gap:8px;
+    padding:12px 16px;
+    background:rgba(26,33,41,0.9);
+    border-bottom:1px solid var(--panel-border);
   }
   .dot{ width:11px; height:11px; border-radius:50%; }
-  .dot.red{ background:#FF5F56; }
-  .dot.yellow{ background:#FFBD2E; }
-  .dot.green{ background:#27C93F; }
-  .terminal-title{
-    margin-left: 8px;
-    color: var(--muted);
-    font-size: 12.5px;
-  }
+  .dot.red{ background:#FF5F56; box-shadow:0 0 6px rgba(255,95,86,0.5); }
+  .dot.yellow{ background:#FFBD2E; box-shadow:0 0 6px rgba(255,189,46,0.5); }
+  .dot.green{ background:#27C93F; box-shadow:0 0 6px rgba(39,201,63,0.5); }
+  .terminal-title{ margin-left:8px; color:var(--muted); font-size:12.5px; }
+
   .terminal-body{
-    padding: 28px 26px 32px;
-    font-size: 15px;
+    padding:28px 28px 34px;
+    font-size:15px;
+    font-family:'JetBrains Mono',monospace;
   }
-  .prompt{ color: var(--accent); }
-  .path{ color: var(--purple); }
-  .cmd{ color: var(--text); }
+  .prompt{ color:var(--accent); }
+  .path{ color:var(--purple); }
+  .cmd{ color:var(--text); }
+
+  /* Avatar with glow ring */
+  .avatar-wrap{
+    float:right;
+    margin-left:20px;
+    position:relative;
+    width:80px; height:80px;
+  }
+  .avatar-ring{
+    position:absolute; inset:-3px;
+    border-radius:13px;
+    background: conic-gradient(
+      var(--accent) 0deg,
+      var(--purple) 120deg,
+      var(--accent) 240deg,
+      var(--purple) 360deg
+    );
+    animation: spin 4s linear infinite;
+    z-index:0;
+  }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+  .avatar-ring-inner{
+    position:absolute; inset:2px;
+    background:var(--bg);
+    border-radius:11px;
+    z-index:1;
+  }
+  .avatar{
+    position:absolute; inset:3px;
+    border-radius:10px;
+    overflow:hidden;
+    z-index:2;
+  }
+  .avatar img{
+    width:100%; height:100%;
+    object-fit:cover;
+    display:block;
+  }
+  .avatar-fallback{
+    width:100%; height:100%;
+    background:linear-gradient(135deg,var(--accent),var(--purple));
+    display:flex; align-items:center; justify-content:center;
+    font-weight:800; font-size:26px; color:#0D1117;
+  }
+
   .out-name{
-    font-size: 34px;
-    font-weight: 800;
-    margin: 14px 0 4px;
-    color: var(--text);
+    font-size:34px; font-weight:800;
+    margin:14px 0 6px;
+    background: linear-gradient(90deg, var(--text) 0%, var(--accent) 50%, var(--purple) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height:1.2;
   }
   .out-role{
-    color: var(--muted);
-    font-size: 15.5px;
-    margin-bottom: 2px;
+    color:var(--muted); font-size:14.5px; margin-bottom:3px;
+    min-height:1.4em;
   }
+  .out-role-line2{ margin-top:2px; }
+
   .cursor{
-    display:inline-block;
-    width: 9px; height: 18px;
-    background: var(--accent);
-    margin-left: 4px;
-    animation: blink 1s steps(1) infinite;
-    vertical-align: -3px;
+    display:inline-block; width:9px; height:17px;
+    background:var(--accent);
+    margin-left:3px;
+    animation:blink 1s steps(1) infinite;
+    vertical-align:-3px;
+    border-radius:1px;
   }
-  @keyframes blink{ 50%{ opacity:0; } }
-  .avatar{
-    width: 74px; height: 74px;
-    border-radius: 10px;
-    background: linear-gradient(135deg, var(--accent), var(--purple));
-    display:flex; align-items:center; justify-content:center;
-    font-weight:800; font-size: 26px; color:#0D1117;
-    float:right;
-    margin-left: 16px;
+  @keyframes blink{ 50%{opacity:0;} }
+
+  .currently{
+    margin-top:20px;
+    padding-top:18px;
+    border-top:1px solid var(--panel-border);
+    display:flex; flex-wrap:wrap; gap:10px;
   }
+  .cur-item{
+    display:flex; align-items:center; gap:8px;
+    background:rgba(255,255,255,0.03);
+    border:1px solid var(--panel-border);
+    border-radius:8px;
+    padding:7px 12px;
+    font-size:13px;
+    transition:border-color 0.2s, background 0.2s;
+  }
+  .cur-item:hover{
+    border-color:var(--accent);
+    background:rgba(79,209,197,0.04);
+  }
+  .cur-icon{ font-size:14px; }
+  .cur-label{ color:var(--muted); font-size:11px; font-family:'JetBrains Mono',monospace; }
+  .cur-value{ color:var(--text); font-size:13px; font-weight:500; }
+  .cur-dot{
+    width:7px; height:7px; border-radius:50%;
+    background:var(--ac);
+    box-shadow:0 0 6px var(--ac);
+    animation:pulse-dot 2s ease-in-out infinite;
+    flex-shrink:0;
+  }
+  @keyframes pulse-dot{
+    0%,100%{ transform:scale(1); opacity:1; }
+    50%{ transform:scale(1.4); opacity:0.7; }
+  }
+
   .section{
-    margin-top: 34px;
-    background: var(--panel);
-    border: 1px solid var(--panel-border);
-    border-radius: 10px;
-    padding: 24px 26px;
+    margin-top:28px;
+    background:rgba(19,25,32,0.7);
+    border:1px solid var(--panel-border);
+    border-radius:12px;
+    padding:24px 26px;
+    backdrop-filter:blur(6px);
+    transition: border-color 0.3s, box-shadow 0.3s;
+    opacity:0;
+    transform:translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease, border-color 0.25s, box-shadow 0.25s;
+  }
+  .section.visible{ opacity:1; transform:translateY(0); }
+  .section:hover{
+    border-color:rgba(79,209,197,0.25);
+    box-shadow:0 0 30px rgba(79,209,197,0.05);
   }
   .section-tag{
-    font-size: 11.5px;
-    letter-spacing: 0.08em;
-    color: var(--accent);
-    text-transform: uppercase;
-    margin-bottom: 10px;
-    font-weight: 700;
+    font-size:11px; letter-spacing:0.1em;
+    color:var(--accent); text-transform:uppercase;
+    margin-bottom:8px; font-weight:700;
+    font-family:'JetBrains Mono',monospace;
   }
-  .section h2{
-    margin: 0 0 14px;
-    font-size: 20px;
-  }
+  .section h2{ margin:0 0 16px; font-size:19px; font-weight:700; }
+
   .kv{
     display:grid;
-    grid-template-columns: 110px 1fr;
-    gap: 6px 14px;
-    font-size: 14.5px;
-    margin-bottom: 4px;
+    grid-template-columns:110px 1fr;
+    gap:6px 14px;
+    font-size:14.5px;
+    margin-bottom:4px;
   }
-  .kv .k{ color: var(--muted); }
-  .arr{
-    font-size: 14.5px;
-    line-height: 1.9;
+  .kv .k{
+    color:var(--muted);
+    font-family:'JetBrains Mono',monospace;
+    font-size:13px;
   }
+  .about-p{
+    margin-top:14px; font-size:14.5px; color:var(--muted);
+    line-height:1.75;
+  }
+
+  .tags{ display:flex; flex-wrap:wrap; gap:8px; }
   .tag{
-    display:inline-block;
-    background: #1B222B;
+    display:inline-flex; align-items:center; gap:6px;
+    background:rgba(27,34,43,0.8);
+    border:1px solid var(--panel-border);
+    color:var(--text);
+    padding:5px 12px;
+    border-radius:8px;
+    font-size:13px;
+    transition:all 0.2s ease;
+    cursor:default;
+  }
+  .tag:hover{
+    border-color:var(--accent);
+    background:rgba(79,209,197,0.06);
+    transform:translateY(-1px);
+    color:var(--accent);
+  }
+
+  .timeline{ position:relative; padding-left:24px; }
+  .timeline::before{
+    content:''; position:absolute; left:7px; top:6px; bottom:6px;
+    width:1px; background:linear-gradient(to bottom, var(--accent), var(--purple), transparent);
+  }
+  .tl-item{ position:relative; margin-bottom:20px; }
+  .tl-dot{
+    position:absolute; left:-24px; top:4px;
+    width:14px; height:14px; border-radius:50%;
+    border:2px solid var(--accent); background:var(--bg);
+    box-shadow:0 0 8px rgba(79,209,197,0.4);
+  }
+  .tl-dot.purple{ border-color:var(--purple); box-shadow:0 0 8px rgba(163,113,247,0.4); }
+
+  .contact-line{
+    font-size:15px; margin:4px 0; cursor:pointer;
+    padding:6px 10px; border-radius:8px;
+    transition:background 0.15s, transform 0.15s;
+    width:fit-content;
+    font-family:'JetBrains Mono',monospace;
+  }
+  .contact-line:hover{
+    background:rgba(27,34,43,0.8);
+    transform:translateX(4px);
+  }
+  .contact-line .fn{ color:var(--purple); }
+  .contact-line .str{ color:var(--ac); }
+  .contact-line .hint{
+    color:var(--muted); font-size:12px; margin-left:10px;
+    opacity:0; transition:opacity 0.15s;
+  }
+  .contact-line:hover .hint{ opacity:1; }
+
+  .shop-cta{
+    display:block; margin:36px auto 0; max-width:320px; text-align:center;
+    background:linear-gradient(135deg, var(--purple), #7c3aed);
+    color:#fff; font-weight:700; font-size:15px;
+    padding:14px 24px; border-radius:10px;
+    transition:all 0.25s ease;
+  }
+  .shop-cta:hover{ transform:translateY(-3px); box-shadow:0 8px 30px rgba(163,113,247,0.4); }
+
+  footer{
+    text-align:center; color:var(--muted);
+    font-size:12.5px; margin-top:56px;
+    font-family:'JetBrains Mono',monospace;
+  }
+
+  /* Social Links */
+  .socials {
+    display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px;
+  }
+  .social-link {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(27,34,43,0.8);
     border: 1px solid var(--panel-border);
     color: var(--text);
-    padding: 3px 10px;
-    border-radius: 6px;
-    margin: 3px 4px 3px 0;
-    font-size: 13.5px;
-  }
-  table{
-    width:100%;
-    border-collapse: collapse;
+    padding: 8px 14px;
+    border-radius: 8px;
     font-size: 14px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    font-family: 'JetBrains Mono', monospace;
   }
-  th, td{
-    text-align:left;
-    padding: 9px 8px;
-    border-bottom: 1px solid var(--panel-border);
+  .social-link:hover {
+    border-color: var(--accent);
+    background: rgba(79,209,197,0.08);
+    transform: translateY(-2px);
+    color: var(--accent);
   }
-  th{
-    color: var(--muted);
-    font-weight: 600;
-    font-size: 12.5px;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-  }
-  .verdict{
-    display:inline-block;
-    padding: 2px 9px;
-    border-radius: 5px;
-    font-size: 12.5px;
-    font-weight: 700;
-  }
-  .verdict.ac{ background: rgba(63,185,80,0.15); color: var(--ac); }
-  .verdict.pending{ background: rgba(163,113,247,0.15); color: var(--purple); }
-  .contact-line{
-    font-size: 15px;
-    margin: 4px 0;
-    cursor: pointer;
-    padding: 4px 8px;
-    border-radius: 6px;
-    transition: background 0.15s ease;
-    width: fit-content;
-  }
-  .contact-line:hover{ background: #1B222B; }
-  .contact-line .fn{ color: var(--purple); }
-  .contact-line .str{ color: var(--ac); }
-  .contact-line .hint{
-    color: var(--muted);
-    font-size: 12px;
-    margin-left: 10px;
-    opacity: 0;
-    transition: opacity 0.15s ease;
-  }
-  .contact-line:hover .hint{ opacity: 1; }
-  .contact-line.copied .hint{
-    opacity: 1;
-    color: var(--ac);
-  }
-  footer{
-    text-align:center;
-    color: var(--muted);
-    font-size: 12.5px;
-    margin-top: 44px;
-  }
-  @media (max-width: 600px){
-    .out-name{ font-size: 26px; }
-    .avatar{ float:none; margin: 0 0 14px 0; }
-    .kv{ grid-template-columns: 90px 1fr; }
+
+  @media(max-width:600px){
+    .out-name{ font-size:26px; }
+    .avatar-wrap{ float:none; margin:0 0 16px 0; }
+    .kv{ grid-template-columns:85px 1fr; }
+    .socials{ justify-content: center; }
   }
 </style>
 </head>
 <body>
 
-<div class="nav">
-  <a href="index.html" class="active">about</a>
-  <a href="shop.html">shop</a>
-</div>
+<nav class="nav">
+  <div class="nav-inner">
+    <span class="nav-logo mono">nmk@vungtau</span>
+    <div class="nav-links">
+      <a href="index.html" class="active">about</a>
+      <a href="shop.html">shop</a>
+    </div>
+  </div>
+</nav>
 
 <div class="wrap">
-  <!-- Nội dung trang giới thiệu giữ nguyên -->
+
   <div class="terminal">
     <div class="terminal-bar">
       <div class="dot red"></div>
       <div class="dot yellow"></div>
       <div class="dot green"></div>
-      <div class="terminal-title mono">NMK — ~/vungtau</div>
+      <span class="terminal-title mono">NMK — ~/vungtau</span>
     </div>
-    <div class="terminal-body mono">
-      <img src="avatar.jpg" class="avatar" style="object-fit:cover;">
-      <div><span class="prompt">guest@web</span>:<span class="path">~</span>$ <span class="cmd">whoami</span><span class="cursor"></span></div>
-      <div class="out-name">Nguyễn Minh Khôi</div>
-      <div class="out-role">Học sinh chuyên Tin THPT Chuyên Lê Quý Đôn— Vũng Tàu</div>
-      <div class="out-role">Thuật toán,cấu trúc dữ liệu</div>
+    <div class="terminal-body">
+      <div class="avatar-wrap">
+        <div class="avatar-ring"></div>
+        <div class="avatar-ring-inner"></div>
+        <div class="avatar">
+          <img src="avatar.jpg" alt="NMK" onerror="this.parentElement.innerHTML='<div class=\'avatar-fallback\'>NMK</div>'">
+        </div>
+      </div>
+
+      <div><span class="prompt">guest@web</span>:<span class="path">~</span>$ <span class="cmd">whoami</span></div>
+      <div class="out-name" id="typedName"></div>
+      <div class="out-role" id="typedRole"></div>
+      <div class="out-role out-role-line2" id="typedRole2"></div>
+
+      <div class="currently">
+        <div class="cur-item"><div class="cur-dot"></div><div><div class="cur-label">đang học</div><div class="cur-value">Lớp 10 chuyên Tin</div></div></div>
+        <div class="cur-item"><span class="cur-icon">⚡</span><div><div class="cur-label">đang code</div><div class="cur-value">C++ / Thuật toán</div></div></div>
+        <div class="cur-item"><span class="cur-icon">🏓</span><div><div class="cur-label">đang tập</div><div class="cur-value">Bóng Bàn</div></div></div>
+        <div class="cur-item" id="currentlyMusic"><span class="cur-icon">🎵</span><div><div class="cur-label">đang nghe</div><div class="cur-value" id="musicVal">...</div></div></div>
+      </div>
     </div>
   </div>
 
+  <!-- Các section cũ giữ nguyên -->
   <div class="section">
     <div class="section-tag">Problem A — Giới thiệu</div>
     <h2>Về mình</h2>
-    <div class="kv">
-      <div class="k">Input:</div>
-      <div>Sự tò mò cùng một chiếc laptop cũ.</div>
-    </div>
-    <div class="kv">
-      <div class="k">Output:</div>
-      <div>Một cậu học sinh bình thường cùng ước mơ không ai nghĩ sẽ chạm tới.</div>
-    </div>
-    <div class="kv">
-      <div class="k">Constraint:</div>
-      <div>Vẫn đang học, vẫn đang cố gắng mỗi ngày một chút.</div>
-    </div>
-    <p style="margin-top:14px; font-size:14.5px; color: var(--muted);">
+    <div class="kv"><div class="k">Input:</div><div>Sự tò mò cùng một chiếc laptop cũ.</div></div>
+    <div class="kv"><div class="k">Output:</div><div>Một cậu học sinh bình thường cùng ước mơ không ai nghĩ sẽ chạm tới.</div></div>
+    <div class="kv"><div class="k">Constraint:</div><div>Vẫn đang học, vẫn đang cố gắng mỗi ngày một chút.</div></div>
+    <p class="about-p">
       Mình là học sinh lớp 10 chuyên Tin, đam mê lập trình thi đấu. Ngoài việc luyện thuật toán,
-      mình cũng là một VDV Bóng Bàn, một KOC làm tóc, một thằng nhóc doom scroll TikTok, và một người bạn luôn sẵn sàng giúp đỡ mọi người. Mình thích học hỏi những điều mới, đặc biệt là trong lĩnh vực lập trình và công nghệ
+      mình cũng là một VĐV Bóng Bàn, một KOC làm tóc, một thằng nhóc doom scroll TikTok,
+      và một người bạn luôn sẵn sàng giúp đỡ mọi người.
     </p>
   </div>
 
   <div class="section">
     <div class="section-tag">Problem B — Kỹ năng</div>
     <h2>Kỹ năng &amp; công cụ</h2>
-    <div class="arr">
-      <span class="tag">C++</span>
-      <span class="tag">Thuật toán</span>
-      <span class="tag">Cấu trúc dữ liệu</span>
-      <span class="tag">Quy hoạch động</span>
-      <span class="tag">Binary Search</span>
-      <span class="tag">Backtracking</span>
-      <span class="tag">Hạng D VTau Bóng Bàn (cựu Top1 VTAU U14 2024)</span>
+    <div class="tags">
+      <span class="tag"><span class="tag-icon">⚙️</span>C++</span>
+      <span class="tag"><span class="tag-icon">🧠</span>Thuật toán</span>
+      <span class="tag"><span class="tag-icon">🌲</span>Cấu trúc dữ liệu</span>
+      <span class="tag"><span class="tag-icon">📐</span>Quy hoạch động</span>
+      <span class="tag"><span class="tag-icon">🔍</span>Binary Search</span>
+      <span class="tag"><span class="tag-icon">↩️</span>Backtracking</span>
+      <span class="tag"><span class="tag-icon">🏓</span>Hạng D VTau Bóng Bàn</span>
+      <span class="tag"><span class="tag-icon">🏆</span>Top 1 VTAU U14 2024</span>
     </div>
   </div>
 
   <div class="section">
     <div class="section-tag">Problem C — Thành tích</div>
     <h2>Quá trình thi đấu</h2>
-    <table>
-      <thead>
-        <tr><th>Kỳ thi</th><th>Năm</th><th>Kết quả</th></tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Đội tuyển Tin TPHCM</td>
-          <td>2026</td>
-          <td><span class="verdict pending">Đang chờ kết quả</span></td>
-        </tr>
-        <tr>
-          <td>Kì thi tuyển sinh 10 vô Chuyên</td>
-          <td>2025</td>
-          <td><span class="verdict ac">AC</span></td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="timeline">
+      <div class="tl-item"><div class="tl-dot purple"></div><div class="tl-year">2026</div><div class="tl-title">Đội tuyển Tin TPHCM</div><div class="tl-sub"><span class="verdict pending">⏳ Đang chờ kết quả</span></div></div>
+      <div class="tl-item"><div class="tl-dot"></div><div class="tl-year">2025</div><div class="tl-title">Kì thi tuyển sinh vào lớp 10 Chuyên</div><div class="tl-sub">THPT Chuyên Lê Quý Đôn — Vũng Tàu</div><div style="margin-top:6px"><span class="verdict ac">✓ AC</span></div></div>
+      <div class="tl-item"><div class="tl-dot"></div><div class="tl-year">2024</div><div class="tl-title">Top 1 Bóng Bàn VTAU U14</div><div class="tl-sub">Hạng mục U14 — Giải Bóng Bàn Vũng Tàu</div><div style="margin-top:6px"><span class="verdict ac">✓ AC</span></div></div>
+    </div>
   </div>
 
+  <!-- Problem D với Social -->
   <div class="section">
     <div class="section-tag">Problem D — Liên hệ</div>
     <h2>Liên hệ với mình</h2>
     <div class="mono">
-      <div class="contact-line" onclick="copyText(this, 'nomokadzvcl@email.com')">
+      <div class="contact-line" onclick="copyText(this,'nomokadzvcl@email.com')">
         <span class="fn">email</span>(<span class="str">"nomokadzvcl@email.com"</span>)<span class="hint">nhấn để copy</span>
       </div>
-      <div class="contact-line" onclick="copyText(this, '0908427574')">
+      <div class="contact-line" onclick="copyText(this,'0908427574')">
         <span class="fn">zalo</span>(<span class="str">"0908427574"</span>)<span class="hint">nhấn để copy</span>
       </div>
-      <div class="contact-line" onclick="window.open('https://fb.com/NoMoKa11/', '_blank')">
+      <div class="contact-line" onclick="window.open('https://fb.com/NoMoKa11/','_blank')">
         <span class="fn">facebook</span>(<span class="str">"fb.com/NoMoKa11/"</span>)<span class="hint">nhấn để mở</span>
+      </div>
+    </div>
+
+    <div style="margin-top:28px;">
+      <div class="section-tag">SOCIALS</div>
+      <div class="socials">
+        <a href="https://www.tiktok.com/@nomoka11" target="_blank" class="social-link">🎵 TikTok</a>
+        <a href="https://www.instagram.com/1401nmk_sin/" target="_blank" class="social-link">📷 Instagram</a>
+        <a href="https://github.com/nmkdzvcl" target="_blank" class="social-link">🐙 GitHub</a>
+        <a href="https://codeforces.com/profile/nmk11cpy" target="_blank" class="social-link">💻 Codeforces</a>
+        <a href="https://discord.com/users/nmk11" target="_blank" class="social-link">💬 Discord</a>
       </div>
     </div>
   </div>
 
-  <!-- Nút đến Shop -->
-  <a href="shop.html" class="shop-link-btn">
-    → Xem toàn bộ Shop
-  </a>
+  <a href="shop.html" class="shop-cta">→ Xem toàn bộ Shop</a>
 
-  <footer>© 2026 — NMK</footer>
+  <footer>© 2026 — NMK &nbsp;·&nbsp; Built with ☕ &amp; C++</footer>
 </div>
 
 <script>
-function copyText(el, value){
+// Typing animation (giữ nguyên)
+const NAME = 'Nguyễn Minh Khôi';
+const ROLE1 = 'Học sinh chuyên Tin — THPT Chuyên Lê Quý Đôn, Vũng Tàu';
+const ROLE2 = 'Thuật toán · Cấu trúc dữ liệu · Lập trình thi đấu';
+
+function typeText(el, text, delay, cb) {
+  let i = 0;
+  el.textContent = '';
+  const iv = setInterval(() => {
+    if (i < text.length) el.textContent += text[i++];
+    else { clearInterval(iv); if (cb) cb(); }
+  }, delay);
+}
+
+window.addEventListener('load', () => {
+  const nameEl = document.getElementById('typedName');
+  const role1El = document.getElementById('typedRole');
+  const role2El = document.getElementById('typedRole2');
+
+  typeText(nameEl, NAME, 45, () => {
+    role1El.innerHTML = '<span class="cursor"></span>';
+    setTimeout(() => typeText(role1El, ROLE1, 22, () => {
+      role1El.innerHTML = ROLE1;
+      role2El.innerHTML = '<span class="cursor"></span>';
+      setTimeout(() => typeText(role2El, ROLE2, 22, () => {
+        role2El.innerHTML = ROLE2 + ' <span class="cursor"></span>';
+      }), 100);
+    }), 200);
+  });
+});
+
+// Music
+const playlist = ['Một Triệu Như Một — Đen Vâu','Ngày Mai Em Đi — Cá Hồi Hoang','Có Chắc Yêu Là Đây — Sơn Tùng','Em Của Ngày Hôm Qua — Sơn Tùng','Bật Tình Yêu Lên — HIEUTHUHAI','Mình Cùng Nhau Đừng — HIEUTHUHAI','Waiting For You — MONO'];
+document.getElementById('musicVal').textContent = playlist[Math.floor(Math.random() * playlist.length)];
+
+// Scroll observer
+const sections = document.querySelectorAll('.section');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.08 });
+sections.forEach(s => observer.observe(s));
+
+// Copy
+function copyText(el, value) {
   navigator.clipboard.writeText(value).then(() => {
     const hint = el.querySelector('.hint');
-    const oldText = hint.textContent;
+    const old = hint.textContent;
     el.classList.add('copied');
     hint.textContent = 'Đã copy!';
     setTimeout(() => {
       el.classList.remove('copied');
-      hint.textContent = oldText;
+      hint.textContent = old;
     }, 1200);
   });
 }
