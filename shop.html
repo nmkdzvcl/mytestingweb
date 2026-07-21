@@ -45,7 +45,7 @@
 
   /* ─── Filter Tabs ─── */
   .filter-tabs{
-    display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap;
+    display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap;
   }
   .tab{
     background: var(--panel);
@@ -69,6 +69,76 @@
     background: rgba(79,209,197,0.18);
     color: var(--accent);
     font-size: 10px; padding: 1px 7px; border-radius: 10px; font-weight: 700;
+  }
+
+  /* ─── Search & Sort Bar ─── */
+  .search-sort-bar{
+    display: flex; gap: 10px; margin-bottom: 14px; flex-wrap: wrap;
+    align-items: center;
+  }
+  .search-wrapper{
+    flex: 1; min-width: 200px;
+    position: relative;
+  }
+  .search-input{
+    width: 100%;
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
+    color: var(--text);
+    padding: 9px 14px 9px 36px;
+    border-radius: 8px;
+    font-size: 13.5px;
+    font-family: 'JetBrains Mono', monospace;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  .search-input::placeholder{ color: var(--muted); }
+  .search-input:focus{
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(79,209,197,0.08);
+  }
+  .search-icon{
+    position: absolute; left: 12px; top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted); font-size: 14px;
+    pointer-events: none;
+  }
+  .search-clear{
+    position: absolute; right: 10px; top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted); cursor: pointer;
+    font-size: 16px; padding: 2px 6px;
+    border-radius: 4px;
+    display: none;
+    transition: color 0.15s;
+  }
+  .search-clear:hover{ color: var(--wa); }
+  .search-clear.visible{ display: block; }
+
+  .sort-select{
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
+    color: var(--text);
+    padding: 9px 32px 9px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-family: 'JetBrains Mono', monospace;
+    outline: none;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238B949E' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    transition: border-color 0.2s ease;
+    min-width: 160px;
+  }
+  .sort-select:focus{
+    border-color: var(--accent);
+  }
+  .sort-select option{
+    background: var(--panel);
+    color: var(--text);
   }
 
   /* ─── Stats bar ─── */
@@ -162,6 +232,15 @@
   .card-body{ padding:14px 16px 16px; flex:1; display:flex; flex-direction:column; }
   .card-tag{ font-size:11px; color:var(--muted); font-family:'JetBrains Mono',monospace; margin-bottom:6px; }
   .card-name{ font-weight:700; font-size:15.5px; margin-bottom:6px; line-height:1.4; }
+
+  /* Highlight search match */
+  .card-name .highlight{
+    background: rgba(79,209,197,0.3);
+    color: var(--accent);
+    border-radius: 2px;
+    padding: 0 2px;
+  }
+
   .card-price{ font-family:'JetBrains Mono',monospace; color:var(--accent); font-weight:700; font-size:15px; margin-bottom:10px; }
 
   .verdict{
@@ -283,6 +362,8 @@
     .filter-tabs{ gap:6px; }
     .tab{ padding:6px 11px; font-size:12px; }
     .grid{ grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:12px; }
+    .search-sort-bar{ flex-direction: column; }
+    .sort-select{ width: 100%; min-width: unset; }
   }
 </style>
 </head>
@@ -311,6 +392,30 @@
     <button class="tab" data-cat="perfume" id="tab-perfume">
       🌸 Nước hoa <span class="tab-count" id="cnt-perfume">0</span>
     </button>
+  </div>
+
+  <!-- ★ Search & Sort Bar ★ -->
+  <div class="search-sort-bar">
+    <div class="search-wrapper">
+      <span class="search-icon">🔍</span>
+      <input 
+        type="text" 
+        class="search-input" 
+        id="searchInput" 
+        placeholder="Tìm theo tên sản phẩm..."
+        autocomplete="off"
+      >
+      <span class="search-clear" id="searchClear" onclick="clearSearch()">✕</span>
+    </div>
+    <select class="sort-select" id="sortSelect">
+      <option value="default">📋 Mặc định</option>
+      <option value="price-asc">💰 Giá thấp → cao</option>
+      <option value="price-desc">💎 Giá cao → thấp</option>
+      <option value="name-asc">🔤 Tên A → Z</option>
+      <option value="name-desc">🔤 Tên Z → A</option>
+      <option value="newest">🆕 Mới nhất</option>
+      <option value="oldest">📅 Cũ nhất</option>
+    </select>
   </div>
 
   <div class="stats-bar mono" id="statsBar">// Đang tải sản phẩm...</div>
@@ -366,6 +471,8 @@ const API_URL = 'https://script.google.com/macros/s/AKfycbzmMcwCJOpH0lWtOEhtF-ek
 // ─── Store ───────────────────────────────────────
 let allProducts = [];
 let currentCat = 'all';
+let currentSearch = '';
+let currentSort = 'default';
 const productStore = {};
 
 const CAT_LABELS = {
@@ -401,7 +508,7 @@ async function fetchProducts() {
     allProducts.forEach(function(p) { productStore[p.id] = p; });
 
     updateTabCounts();
-    renderCards(filterProducts());
+    applyAllFilters();
   } catch (err) {
     document.getElementById('productGrid').innerHTML =
       '<div class="error-state">' +
@@ -413,12 +520,84 @@ async function fetchProducts() {
   }
 }
 
-// ─── Filter ──────────────────────────────────────
-function filterProducts() {
+// ─── Filter: Category ────────────────────────────
+function filterByCategory() {
   if (currentCat === 'all') return allProducts;
   return allProducts.filter(function(p) {
     return (p.category || 'other') === currentCat;
   });
+}
+
+// ─── Filter: Search ──────────────────────────────
+function filterBySearch(products) {
+  if (!currentSearch.trim()) return products;
+  var query = currentSearch.toLowerCase().trim();
+  return products.filter(function(p) {
+    return (p.name || '').toLowerCase().indexOf(query) !== -1;
+  });
+}
+
+// ─── Filter: Sort ────────────────────────────────
+function sortProducts(products) {
+  var sorted = products.slice();
+
+  switch (currentSort) {
+    case 'price-asc':
+      sorted.sort(function(a, b) {
+        return extractPrice(a.price) - extractPrice(b.price);
+      });
+      break;
+    case 'price-desc':
+      sorted.sort(function(a, b) {
+        return extractPrice(b.price) - extractPrice(a.price);
+      });
+      break;
+    case 'name-asc':
+      sorted.sort(function(a, b) {
+        return (a.name || '').localeCompare(b.name || '', 'vi');
+      });
+      break;
+    case 'name-desc':
+      sorted.sort(function(a, b) {
+        return (b.name || '').localeCompare(a.name || '', 'vi');
+      });
+      break;
+    case 'newest':
+      // ID lớn hơn = mới hơn (giả định)
+      sorted.sort(function(a, b) {
+        return (parseInt(b.id) || 0) - (parseInt(a.id) || 0);
+      });
+      break;
+    case 'oldest':
+      sorted.sort(function(a, b) {
+        return (parseInt(a.id) || 0) - (parseInt(b.id) || 0);
+      });
+      break;
+    default:
+      // Mặc định: còn hàng lên trước
+      sorted.sort(function(a, b) {
+        var aAvail = a.status === 'available' ? 0 : 1;
+        var bAvail = b.status === 'available' ? 0 : 1;
+        return aAvail - bAvail;
+      });
+      break;
+  }
+  return sorted;
+}
+
+// ─── Extract price number ────────────────────────
+function extractPrice(priceStr) {
+  if (!priceStr) return 0;
+  var cleaned = String(priceStr).replace(/[^\d]/g, '');
+  return parseInt(cleaned, 10) || 0;
+}
+
+// ─── Apply all filters ───────────────────────────
+function applyAllFilters() {
+  var filtered = filterByCategory();
+  filtered = filterBySearch(filtered);
+  filtered = sortProducts(filtered);
+  renderCards(filtered);
 }
 
 function updateTabCounts() {
@@ -438,9 +617,25 @@ function updateTabCounts() {
 
 function updateStats(total, available) {
   var sb = document.getElementById('statsBar');
-  if (total === 0) { sb.textContent = '// Không có sản phẩm'; return; }
+  if (total === 0) {
+    if (currentSearch.trim()) {
+      sb.textContent = '// Không tìm thấy sản phẩm nào cho "' + currentSearch + '"';
+    } else {
+      sb.textContent = '// Không có sản phẩm';
+    }
+    return;
+  }
+  var searchInfo = currentSearch.trim() ? ' · tìm kiếm "<span>' + escHtml(currentSearch) + '</span>"' : '';
   sb.innerHTML = '// <span>' + available + '</span> còn hàng · <span>' +
-    (total - available) + '</span> đã bán · tổng <span>' + total + '</span> sản phẩm';
+    (total - available) + '</span> đã bán · tổng <span>' + total + '</span> sản phẩm' + searchInfo;
+}
+
+// ─── Highlight search match ──────────────────────
+function highlightText(text, query) {
+  if (!query.trim()) return escHtml(text);
+  var escapedQuery = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  var regex = new RegExp('(' + escapedQuery + ')', 'gi');
+  return escHtml(text).replace(regex, '<span class="highlight">$1</span>');
 }
 
 // ─── Render cards ─────────────────────────────────
@@ -452,21 +647,15 @@ function renderCards(products) {
   if (products.length === 0) {
     grid.innerHTML =
       '<div class="empty-state"><div class="ei">📭</div>' +
-      '// Không có sản phẩm trong danh mục này</div>';
+      '// Không có sản phẩm' + (currentSearch.trim() ? ' cho "' + escHtml(currentSearch) + '"' : ' trong danh mục này') + '</div>';
     return;
   }
 
-  // Sắp xếp: còn hàng lên trước
-  var sorted = products.slice().sort(function(a, b) {
-    var aAvail = a.status === 'available' ? 0 : 1;
-    var bAvail = b.status === 'available' ? 0 : 1;
-    return aAvail - bAvail;
-  });
-
-  grid.innerHTML = sorted.map(createCardHTML).join('');
+  var query = currentSearch.trim();
+  grid.innerHTML = products.map(function(p) { return createCardHTML(p, query); }).join('');
 }
 
-function createCardHTML(p) {
+function createCardHTML(p, query) {
   var isSold = p.status !== 'available';
   var imgs = p.imageUrls || [];
   var hasGallery = imgs.length > 1;
@@ -510,8 +699,8 @@ function createCardHTML(p) {
     imgHTML +
     '<div class="card-body">' +
     '<div class="card-tag">#' + idPadded + '</div>' +
-    '<div class="card-name">' + escHtml(p.name) + '</div>' +
-    '<div class="card-price">' + escHtml(p.price) + '</div>' +
+    '<div class="card-name">' + highlightText(p.name || 'Không tên', query) + '</div>' +
+    '<div class="card-price">' + escHtml(p.price || '') + '</div>' +
     verdictHTML + btnHTML +
     '</div></div>';
 }
@@ -608,8 +797,39 @@ document.querySelectorAll('.tab').forEach(function(tab) {
     document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); });
     tab.classList.add('active');
     currentCat = tab.dataset.cat;
-    renderCards(filterProducts());
+    applyAllFilters();
   });
+});
+
+// ─── Search ──────────────────────────────────────
+var searchInput = document.getElementById('searchInput');
+var searchClear = document.getElementById('searchClear');
+
+searchInput.addEventListener('input', function() {
+  currentSearch = this.value;
+  // Show/hide clear button
+  if (currentSearch.trim()) {
+    searchClear.classList.add('visible');
+  } else {
+    searchClear.classList.remove('visible');
+  }
+  applyAllFilters();
+});
+
+// Clear search
+function clearSearch() {
+  searchInput.value = '';
+  currentSearch = '';
+  searchClear.classList.remove('visible');
+  applyAllFilters();
+  searchInput.focus();
+}
+
+// ─── Sort ────────────────────────────────────────
+var sortSelect = document.getElementById('sortSelect');
+sortSelect.addEventListener('change', function() {
+  currentSort = this.value;
+  applyAllFilters();
 });
 
 // ─── Copy ─────────────────────────────────────────
